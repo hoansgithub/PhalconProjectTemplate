@@ -12,7 +12,6 @@ class Module
 
 		$loader->registerNamespaces(array(
 			'Site\Controllers' => '../apps/site/controllers/',
-			'Site\Models' => '../apps/site/models/',
 			'Site\Plugins' => '../apps/plugins/',
 		));
 

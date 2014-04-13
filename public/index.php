@@ -19,6 +19,7 @@ try {
 			__DIR__ . $config->application->modulesDir,
 			__DIR__ . $config->application->pluginsDir,
 			__DIR__ . $config->application->libraryDir,
+			__DIR__ . $config->application->modelsDir,
 		)
 	)->register();
 
