@@ -2,6 +2,7 @@
 
 namespace Site;
 use Security;
+ use \Phalcon\Mvc\Dispatcher as PhDispatcher;
 class Module
 {
 
@@ -33,7 +34,7 @@ class Module
 			$eventManager = new \Phalcon\Events\Manager();
 
 			$dispatcher->setEventsManager($eventManager);
-			$dispatcher->setDefaultNamespace("Site\Controllers\\");
+			$dispatcher->setDefaultNamespace("Site\Controllers");
 			
 			
 			$eventsManager = $di->getShared('eventsManager');
@@ -45,8 +46,29 @@ class Module
 		 */
 		$eventsManager->attach('dispatch', $security);
 
-		$dispatcher->setEventsManager($eventsManager);
+		
 
+		
+		  $eventsManager->attach(
+            "dispatch:beforeException",
+            function($event, $dispatcher, $exception)
+            {
+                switch ($exception->getCode()) {
+                    case PhDispatcher::EXCEPTION_HANDLER_NOT_FOUND:
+                    case PhDispatcher::EXCEPTION_ACTION_NOT_FOUND:
+                        $dispatcher->forward(
+                            array(
+                                'controller' => 'error',
+                                'action'     => 'index',
+                            )
+                        );
+                        return false;
+                }
+            }
+        );
+        $dispatcher->setEventsManager($eventsManager);
+		
+		
 		return $dispatcher;
 		});
 

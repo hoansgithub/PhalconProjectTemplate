@@ -36,7 +36,7 @@ try {
 		$eventsManager = $di->getShared('eventsManager');
 
 		$security = new Security($di);
-
+		
 		/**
 		 * We listen for events in the dispatcher using the Security plugin
 		 */
@@ -44,6 +44,9 @@ try {
 
 		$dispatcher = new Phalcon\Mvc\Dispatcher();
 		$dispatcher->setEventsManager($eventsManager);
+		
+		 
+		
 
 		return $dispatcher;
 	});
@@ -176,7 +179,7 @@ try {
 					'module' => "admin",
 					'controller' => 1,
 					'action' => 2
-			));
+			))->setName('admin-controller');
 
 			$router->add('/admin/:controller/:action/:params', array(
 					'module' => "admin",
@@ -191,9 +194,9 @@ try {
 			));
 
 			
-
+			
 			return $router;
-
+			
 		});
 		$application = new \Phalcon\Mvc\Application();
 	//	$application->_registerServices();

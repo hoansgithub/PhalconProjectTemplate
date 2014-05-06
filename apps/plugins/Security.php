@@ -38,7 +38,8 @@ class Security extends Plugin
 
 			//Private area resources
 			$privateResources = array(
-				'admin' => array('login'),
+				
+				'admin' => array('item'),
 				
 			);
 			foreach ($privateResources as $resource => $actions) {
@@ -48,7 +49,7 @@ class Security extends Plugin
 			//Public area resources
 			$publicResources = array(
 				'site' => array('index'),
-				'admin' => array('index'),
+				'adminindex' => array('index','error'),
 			);
 			foreach ($publicResources as $resource => $actions) {
 				$acl->addResource(new Phalcon\Acl\Resource($resource), $actions);
@@ -96,12 +97,12 @@ class Security extends Plugin
 		if (!$auth){
 			$role = 'Guests';
 		} else {
-			if($auth['role']==0)
+			if($auth['role']==4)
 			{
-			$role = 'Users';
+			$role = 'Admins';
 			}
 			else{
-				$role = 'Admins';
+				$role = 'Users';
 			}
 		}
 
@@ -109,7 +110,7 @@ class Security extends Plugin
 		$action = $dispatcher->getActionName();
 		$module=$dispatcher->getModuleName(); 
 		$acl = $this->getAcl();
-
+		if($module=='admin'&&($controller=='index'||$controller=='error')){$module='adminindex';}
 		$allowed = $acl->isAllowed($role, $module, $controller);
 		if ($allowed != Acl::ALLOW) {
 			$this->flash->error("You don't have access to this module");
@@ -120,7 +121,7 @@ class Security extends Plugin
 //					'action' => 'index'
 //				)
 //			);
-			$this->response->redirect('/');
+			$this->response->redirect('index');
 			return false;
 		}
 

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="Zend_xsis">
+    <serverData>
+      <paths name="Zend_xsis">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="PhalconProjectTemplate" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
+

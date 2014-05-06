@@ -12,7 +12,7 @@ class IndexController extends \ControllerBase
     }
 	public function indexAction()
 	{
-		$prods=  \Products::find();
+		$prods=  \Items::find();
 		 $this->flash->notice('This is a sample application of the Phalcon PHP Framework.
                 Please don\'t provide us any personal information. Thanks');
 		$this->view->setVar("prods", $prods);

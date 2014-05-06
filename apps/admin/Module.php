@@ -2,6 +2,7 @@
 
 namespace Admin;
 use Security;
+use Phalcon\Mvc\Dispatcher as PhDispatcher;
 class Module
 {
 
@@ -24,8 +25,7 @@ class Module
 	public function registerServices($di)
 	{
 
-		//Registering a dispatcher
-		//Registering a dispatcher
+			//Registering a dispatcher
 		$di->set('dispatcher', function() use ($di) {
 			
 			$dispatcher = new \Phalcon\Mvc\Dispatcher();
@@ -34,7 +34,7 @@ class Module
 			$eventManager = new \Phalcon\Events\Manager();
 
 			$dispatcher->setEventsManager($eventManager);
-			$dispatcher->setDefaultNamespace("Admin\Controllers\\");
+			$dispatcher->setDefaultNamespace("Admin\Controllers");
 			
 			
 			$eventsManager = $di->getShared('eventsManager');
@@ -46,8 +46,29 @@ class Module
 		 */
 		$eventsManager->attach('dispatch', $security);
 
-		$dispatcher->setEventsManager($eventsManager);
+		
 
+		
+		  $eventsManager->attach(
+            "dispatch:beforeException",
+            function($event, $dispatcher, $exception)
+            {
+                switch ($exception->getCode()) {
+                    case PhDispatcher::EXCEPTION_HANDLER_NOT_FOUND:
+                    case PhDispatcher::EXCEPTION_ACTION_NOT_FOUND:
+                        $dispatcher->forward(
+                            array(
+                                'controller' => 'error',
+                                'action'     => 'index',
+                            )
+                        );
+                        return false;
+                }
+            }
+        );
+        $dispatcher->setEventsManager($eventsManager);
+		
+		
 		return $dispatcher;
 		});
 
